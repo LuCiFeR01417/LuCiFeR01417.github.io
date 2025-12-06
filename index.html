@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aayush Kanani | System Log</title>
+    <title>Aayush Kanani | Cyber Security Expert</title>
     <style>
         /* --- CORE SYSTEM AESTHETICS --- */
         :root {
-            --bg-color: #030008;
-            --terminal-bg: #0d001a;
+            --bg-color: #05020a;
+            --terminal-bg: #0f0518;
             --text-color: #e0d0ff;
             --primary-glow: #bd00ff; /* Neon Purple */
             --secondary-glow: #7000ff; /* Deep Violet */
-            --accent: #00f3ff; /* Cyan/Glitch contrast */
-            --font-main: 'Fira Code', 'Courier New', monospace;
-            --prompt-color: #00ffaa; /* Green for Prompt */
+            --accent: #00f3ff; /* Cyan for contrast */
+            --glass: rgba(18, 4, 31, 0.85);
+            --font-main: 'Courier New', Courier, monospace;
         }
 
         body {
@@ -25,49 +25,43 @@
             padding: 0;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.08) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(189, 0, 255, 0.08) 0%, transparent 30%);
-            min-height: 100vh;
+                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(189, 0, 255, 0.1) 0%, transparent 20%);
         }
 
-        /* --- LAYOUT & TERMINAL WINDOWS --- */
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--secondary-glow); border-radius: 5px; }
+
+        /* --- LAYOUT --- */
         .container {
-            max-width: 950px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px 10px;
-        }
-
-        .terminal-window {
-            background: var(--terminal-bg);
-            border: 2px solid var(--secondary-glow);
-            border-radius: 4px;
-            margin-bottom: 40px;
-            box-shadow: 0 0 25px rgba(189, 0, 255, 0.1);
-            overflow: hidden;
             padding: 20px;
         }
 
         /* --- HEADER / ASCII --- */
         header {
             text-align: center;
-            padding: 30px 0;
-            margin-bottom: 30px;
+            padding: 40px 0;
+            animation: fadeIn 2s ease-in;
         }
 
-        .ascii-art {
-            font-size: 8px;
-            line-height: 7px;
-            color: var(--primary-glow);
-            text-shadow: 0 0 5px rgba(189, 0, 255, 0.5);
+        .glitch-text {
+            font-size: 2.5rem;
+            text-shadow: 
+                0 0 5px var(--primary-glow),
+                0 0 10px var(--primary-glow),
+                0 0 20px var(--secondary-glow);
+            color: #fff;
+            margin-bottom: 10px;
         }
 
-        .main-title {
+        .subtitle {
             color: var(--accent);
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px var(--accent);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
         }
 
         .contact-info a {
@@ -77,195 +71,228 @@
             border-bottom: 1px dashed var(--secondary-glow);
             transition: 0.3s;
         }
-        .contact-info a:hover { color: var(--primary-glow); text-shadow: 0 0 5px var(--primary-glow); }
+        .contact-info a:hover { color: var(--primary-glow); text-shadow: 0 0 8px var(--primary-glow); }
 
-        /* --- TYPING EFFECT / PROMPTS --- */
-        .prompt-line {
+        /* --- TERMINAL WINDOWS --- */
+        .terminal-window {
+            background: var(--glass);
+            border: 1px solid var(--secondary-glow);
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(112, 0, 255, 0.15);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .terminal-window:hover {
+            box-shadow: 0 0 25px rgba(189, 0, 255, 0.3);
+            border-color: var(--primary-glow);
+        }
+
+        .window-bar {
+            background: linear-gradient(90deg, #1a0b2e, #2d1b4e);
+            padding: 8px 15px;
+            border-bottom: 1px solid var(--secondary-glow);
             display: flex;
             align-items: center;
-            margin: 15px 0 10px 0;
-        }
-        .prompt {
-            color: var(--prompt-color);
-            font-weight: bold;
-            margin-right: 10px;
-            white-space: nowrap;
-        }
-        .command {
-            color: var(--text-color);
-            flex-grow: 1;
-        }
-        
-        #typing-text {
-            border-right: 2px solid var(--primary-glow);
-            animation: typing 4s steps(40, end), blink-cursor 0.75s step-end infinite;
-            white-space: nowrap;
-            overflow: hidden;
-            display: inline-block;
+            font-size: 0.9rem;
+            color: #bfa5ff;
         }
 
-        /* --- LIST & CONTENT STYLING --- */
-        ul { list-style-type: none; padding-left: 0; }
-        .log-entry {
-            border-left: 3px solid var(--primary-glow);
-            padding-left: 15px;
-            margin-bottom: 20px;
+        .dots span {
+            height: 10px; width: 10px;
+            background-color: #ff5f56; border-radius: 50%;
+            display: inline-block; margin-right: 5px;
         }
-        .log-header {
-            color: var(--accent);
-            font-size: 1.1rem;
-            margin: 0 0 5px 0;
+        .dots span:nth-child(2) { background-color: #ffbd2e; }
+        .dots span:nth-child(3) { background-color: #27c93f; }
+
+        .content {
+            padding: 20px;
+            line-height: 1.6;
         }
-        .log-detail {
-            color: #aaa;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
+
+        /* --- TYPOGRAPHY & COMMANDS --- */
+        .prompt { color: var(--accent); font-weight: bold; margin-right: 10px; }
+        .command { color: var(--primary-glow); }
+        h2 { color: var(--primary-glow); margin-top: 0; border-bottom: 1px solid var(--secondary-glow); padding-bottom: 10px; }
+        
         .highlight { color: #fff; font-weight: bold; }
-        
-        .code-block {
-            background: #15002a;
+
+        /* --- SKILLS GRID --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .skill-card {
+            border: 1px solid rgba(189, 0, 255, 0.3);
+            background: rgba(189, 0, 255, 0.05);
             padding: 10px;
-            margin: 10px 0;
-            border-left: 5px solid var(--primary-glow);
-            white-space: pre-wrap;
             font-size: 0.9rem;
         }
+        .skill-card:hover { background: rgba(189, 0, 255, 0.1); }
 
+        /* --- LISTS --- */
+        ul { list-style-type: none; padding-left: 0; }
+        li::before {
+            content: ">> ";
+            color: var(--primary-glow);
+        }
+        
         /* --- ANIMATIONS --- */
-        @keyframes blink-cursor { from, to { border-color: transparent } 50% { border-color: var(--primary-glow); } }
-        @keyframes typing { from { width: 0 } }
-
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: var(--primary-glow);
+            animation: blink 1s infinite;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <pre class="ascii-art">
- /$$$$$$$$ /$$   /$$ /$$$$$$$  /$$$$$$$$ /$$$$$$$  /$$$$$$$$ 
-| $$_____/| $$  /$$/| $$__  $$| $$_____/| $$__  $$| $$_____/ 
-| $$      | $$ /$$/ | $$  \ $$| $$      | $$  \ $$| $$      
-| $$$$$   | $$$$$/  | $$$$$$$/| $$$$$   | $$$$$$$/| $$$$$   
-| $$__/   | $$  $$  | $$__  $$| $$__/   | $$__  $$| $$__/   
-| $$      | $$\  $$ | $$  \ $$| $$      | $$  \ $$| $$      
-| $$      | $$ \  $$| $$  | $$| $$$$$$$$| $$  | $$| $$$$$$$$
-|__/      |__/  \__/|__/  |__/|________/|__/  |__/|________/
-</pre>
-        <h1 class="main-title">A A Y U S H &nbsp; K A N A N I</h1>
-        <div style="color: var(--primary-glow); font-size: 1.1rem;">SENIOR SECURITY ENGINEER :: RED TEAM SPECIALIST</div>
+        <pre style="font-size: 8px; color: var(--primary-glow); line-height: 8px; margin-bottom: 20px;">
+   __    __     __    __     __     __   __     ______     __   __     __    
+  /\ \-./  \   /\ "-./  \   /\ \   /\ "-.\ \   /\  ___\   /\ "-.\ \   /\ \   
+  \ \ \-./\ \  \ \ \-./\ \  \ \ \  \ \ \-.  \  \ \___  \  \ \ \-.  \  \ \ \  
+   \ \_\ \ \_\  \ \_\ \ \_\  \ \_\  \ \_\\"\_\  \/\_____\  \ \_\\"\_\  \ \_\ 
+    \/_/  \/_/   \/_/  \/_/   \/_/   \/_/ \/_/   \/_____/   \/_/ \/_/   \/_/ 
+        </pre>
+        
+        <h1 class="glitch-text">AAYUSH KANANI</h1>
+        <div class="subtitle">SENIOR SECURITY ENGINEER | RED TEAMER</div>
         
         <div class="contact-info" style="margin-top: 20px;">
-            <a href="mailto:kananiaayush@gmail.com">[email: kananiaayush@gmail.com]</a>
-            <a href="#">[link: LinkedIn]</a>
-            <a href="#">[link: GitHub]</a>
+            <a href="mailto:kananiaayush@gmail.com">Email</a>
+            <a href="#">LinkedIn</a> <a href="#">GitHub</a>   <span style="color: var(--accent)">Bengaluru, India</span>
         </div>
     </header>
 
     <div class="terminal-window">
-        <div class="prompt-line">
-            <span class="prompt">LuCiFeR01417@prod-sec:$</span>
-            <span class="command">./0x01_INIT.sh --summary</span>
+        <div class="window-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span style="margin-left: 15px;">root@aayush:~/mission_objective</span>
         </div>
-        <div class="code-block">
-            <span id="typing-text" style="color: var(--text-color); display: inline-block;">
-                [cite_start]Experienced cybersecurity expert specializing in proactive defense against diverse cyber threats[cite: 4]. [cite_start]Highly skilled in penetration testing and red teaming, designing complex attack scenarios, and developing robust security strategies[cite: 5]. [cite_start]Ready to leverage expertise to enhance an organization's security posture[cite: 7].
-            </span>
+        <div class="content">
+            <p>
+                <span class="prompt">root@aayush:~#</span> 
+                <span class="command">cat summary.txt</span>
+            </p>
+            <p>
+                Experienced cybersecurity expert specializing in proactive defense measures against diverse cyber threats. 
+                Highly skilled in <span class="highlight">penetration testing</span> and <span class="highlight">red teaming</span>, 
+                with a proven track record of identifying vulnerabilities, designing complex attack scenarios, and developing robust security strategies.
+                Committed to continuous professional development to secure sensitive data and systems.
+            </p>
         </div>
-
-        <div class="prompt-line">
-            <span class="prompt">LuCiFeR01417@prod-sec:$</span>
-            <span class="command">cat /var/log/EXECUTION/0x02_EXEC_LOGS.log</span>
-        </div>
-        <div style="padding: 0 10px;">
-            <div class="log-entry">
-                <h3 class="log-header">SENIOR SECURITY ENGINEER :: ACCENTURE</h3>
-                <div class="log-detail">Sep. 2024-Present | Bengaluru/ India</div>
-                <ul>
-                    [cite_start]<li>Led security architecture reviews across 40+ enterprise applications, reducing critical vulnerabilities by 72%[cite: 17].</li>
-                    [cite_start]<li>Led API security assessments, identifying 65+ high-severity vulnerabilities (auth bypass, IDOR, SSRF)[cite: 18].</li>
-                    [cite_start]<li>Performed advanced Android application security evaluations, validating remediation of 11+ high-severity findings[cite: 19].</li>
-                    [cite_start]<li>Drove repeat client engagement growth by 40% through proactive communication and security insights[cite: 20].</li>
-                </ul>
-            </div>
-
-            <div class="log-entry">
-                <h3 class="log-header">SECURITY ANALYST :: TATA CONSULTANCY SERVICES</h3>
-                <div class="log-detail">July 2021-Aug 2024 | Bengaluru/India</div>
-                <ul>
-                    [cite_start]<li>Performed hands-on security testing for client web portals and REST APIs using Burp Suite, Postman, and manual test cases[cite: 25].</li>
-                    [cite_start]<li>Conducted structured endpoint mapping and parameter analysis using Gobuster/Dirbuster to uncover hidden routes and misconfigurations[cite: 26].</li>
-                    [cite_start]<li>Documented verified findings with detailed replication steps and coordinated with development teams for fix validation[cite: 28].</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="prompt-line">
-            <span class="prompt">LuCiFeR01417@prod-sec:$</span>
-            <span class="command">tree /usr/local/modules/0x03_MODULE_MAP</span>
-        </div>
-        <div class="code-block">
-<pre style="color: var(--text-color);">
-.
-[cite_start]├── AD Exploitation [cite: 32]
-│   ├── Techniques: Kerberoasting, AS-REP Roasting, Golden Ticket
-[cite_start]│   └── Tooling: Mimikatz, BloodHound, CrackMapExec, Impacket [cite: 33]
-[cite_start]├── Web & API Security [cite: 36]
-│   ├── Methodology: OWASP API Top 10, Object-Level Authorization, Logic Flaws
-[cite_start]│   └── Tooling: Burp Suite Pro, Postman, SQLMap, Custom Fuzzers, Python Automation [cite: 37]
-[cite_start]├── Offensive Tooling & Scripting [cite: 38]
-│   ├── Languages: Python, PowerShell, Bash, C/C# (AV Evasion)
-│   └── OS: Linux (Kali), Windows Environments
-[cite_start]├── Vulnerability Mgmt & Protocol Stack [cite: 30, 31]
-│   ├── Networking: TCP/IP, OSI Model, IDS/IPS, Firewalls
-│   └── Frameworks: CVSS, Cyber Kill Chain, MITRE ATT&CK
-[cite_start]└── Communication [cite: 34, 35]
-    └── High-quality reporting, Executive presentations, Remediation playbooks
-</pre>
-        </div>
-
-        <div class="prompt-line">
-            <span class="prompt">LuCiFeR01417@prod-sec:$</span>
-            <span class="command">/etc/credentials/0x04_CERTIFICATES --list</span>
-        </div>
-        <div style="padding: 0 10px;">
-            <ul style="color: var(--accent);">
-                [cite_start]<li>Offensive Security Certified Professional (OSCP) :: May 2024 [cite: 9]</li>
-                [cite_start]<li>Certified Ethical Hacker (CEH) Practical :: January 2023 [cite: 10, 11]</li>
-                [cite_start]<li>Ethical Hacking (EDU FABRICA) Springfest IIT Kharagpur :: March 2021 [cite: 12]</li>
-            </ul>
-        </div>
-        
     </div>
 
-    <div style="text-align: center; margin-bottom: 30px; font-size: 0.8rem; color: #555;">
-        System Build Status: <span style="color: var(--prompt-color); font-weight: bold;">OK</span> | Session Active.
+    <div class="terminal-window">
+        <div class="window-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span style="margin-left: 15px;">root@aayush:~/logs/experience</span>
+        </div>
+        <div class="content">
+            <p><span class="prompt">root@aayush:~/logs#</span> <span class="command">./show_history.sh</span></p>
+
+            <h3 style="color: var(--accent);">[CURRENT] SENIOR SECURITY ENGINEER @ ACCENTURE</h3>
+            <div style="font-size: 0.85rem; color: #888; margin-bottom: 10px;">Bengaluru, India | Sep 2024 - Present</div>
+            <ul>
+                <li>Led end-to-end security architecture reviews across <span class="highlight">40+ enterprise applications</span>, reducing critical vulnerabilities by 72%.</li>
+                <li>Conducted API security assessments for BFSI clients, identifying 65+ high-severity vulnerabilities (IDOR, SSRF, Auth Bypass).</li>
+                <li>Performed advanced Android application security evaluations leveraging OWASP Top 10.</li>
+                <li>Delivered actionable remediation guidance resulting in a 92% remediation success rate.</li>
+            </ul>
+
+            <hr style="border: 0; border-bottom: 1px dashed var(--secondary-glow); margin: 20px 0;">
+
+            <h3 style="color: var(--accent);">[PREV] SECURITY ANALYST @ TATA CONSULTANCY SERVICES</h3>
+            <div style="font-size: 0.85rem; color: #888; margin-bottom: 10px;">Bengaluru, India | July 2021 - Aug 2024</div>
+            <ul>
+                <li>Performed hands-on security testing for client web portals and REST APIs using Burp Suite and Postman.</li>
+                <li>Conducted structured endpoint mapping using tools like Gobuster/Dirbuster to uncover hidden routes.</li>
+                <li>Documented findings with detailed replication steps and coordinated with dev teams for fixes.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="terminal-window">
+        <div class="window-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span style="margin-left: 15px;">root@aayush:~/arsenal</span>
+        </div>
+        <div class="content">
+            <p><span class="prompt">root@aayush:~/arsenal#</span> <span class="command">ls -la --modules</span></p>
+            
+            <div class="grid">
+                <div class="skill-card">
+                    <strong style="color: var(--accent)">> AD EXPLOITATION</strong><br>
+                    Kerberoasting, AS-REP Roasting, Pass-the-Ticket, Golden Ticket, DCSync.
+                </div>
+                <div class="skill-card">
+                    <strong style="color: var(--accent)">> OFFENSIVE TOOLS</strong><br>
+                    Mimikatz, BloodHound, CrackMapExec, Impacket, Sysinternals.
+                </div>
+                <div class="skill-card">
+                    <strong style="color: var(--accent)">> WEB & API SEC</strong><br>
+                    Burp Suite Pro, Postman, SQLMap, OWASP API Top 10, GraphQL Security.
+                </div>
+                <div class="skill-card">
+                    <strong style="color: var(--accent)">> SCRIPTING</strong><br>
+                    Python, PowerShell, Bash, C/C# (AV Evasion).
+                </div>
+                <div class="skill-card">
+                    <strong style="color: var(--accent)">> NETWORK SEC</strong><br>
+                    TCP/IP, OSI Model, IDS/IPS, Firewalls, Wireshark.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="terminal-window">
+        <div class="window-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span style="margin-left: 15px;">root@aayush:~/credentials</span>
+        </div>
+        <div class="content">
+            <p><span class="prompt">root@aayush:~/credentials#</span> <span class="command">cat certs.db</span></p>
+            
+            <div style="margin-bottom: 15px;">
+                <span style="color: var(--primary-glow)">★ OSCP</span> (Offensive Security Certified Professional) - <span style="font-size: 0.8rem">May 2024</span>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <span style="color: var(--primary-glow)">★ CEH Practical</span> (Certified Ethical Hacker) - <span style="font-size: 0.8rem">Jan 2023</span>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <span style="color: var(--primary-glow)">★ Ethical Hacking</span> (IIT Kharagpur Springfest) - <span style="font-size: 0.8rem">Mar 2021</span>
+            </div>
+
+            <br>
+            <p><span class="prompt">root@aayush:~/credentials#</span> <span class="command">cat education.db</span></p>
+            <ul>
+                <li>Bachelor's in Computer Applications - Marwadi University (8.13 CGPA) [May 2021]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 40px; font-size: 0.8rem; opacity: 0.7;">
+        System Status: ONLINE <span class="cursor"></span><br>
+        &copy; 2025 Aayush Kanani. Built for the Void.
     </div>
 
 </div>
 
 <script>
-    const typingElement = document.getElementById('typing-text');
-    const textToType = typingElement.textContent.trim();
-    typingElement.textContent = ''; // Clear content for typing effect
-    
-    let i = 0;
-    const speed = 25; // Speed in milliseconds
-
-    function typeWriter() {
-      if (i < textToType.length) {
-        typingElement.textContent += textToType.charAt(i);
-        i++;
-        setTimeout(typeWriter, speed);
-      } else {
-        // Stop the typing animation after it finishes
-        typingElement.style.borderRight = 'none';
-        typingElement.style.animation = 'none';
-      }
-    }
-
-    // Delay the start of the typing effect slightly
-    setTimeout(typeWriter, 1000); 
+    // Simple script to create a typing effect for the title if desired
+    console.log("%c SYSTEM BREACH DETECTED ", "color: #bd00ff; font-size: 20px; background: #000;");
+    console.log("Welcome to the portfolio, Aayush.");
 </script>
 
 </body>
